@@ -27,7 +27,7 @@ func ReadStd() {
 		word, _, _ := stdin.ReadLine()
 		spt := strings.Split(string(word), " ")
 		switch spt[0] {
-		case "/conn": // /conn addr:port
+		case "!conn": // /conn addr:port
 			err := MakeConn(spt[1])
 			if err != nil {
 				fmt.Printf("[ERR]%v\n", err)
