@@ -1,3 +1,3 @@
-module socketGo
+module SocketGo
 
 go 1.16
