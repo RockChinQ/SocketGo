@@ -7,7 +7,7 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-func main() {
+func TermboxTest() {
 	termbox.Init()
 	termbox.SetCursor(0, 0)
 	for {
