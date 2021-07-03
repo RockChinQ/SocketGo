@@ -4,16 +4,28 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+
+	"github.com/nsf/termbox-go"
 )
 
+func InitTermbox() {
+	if err := termbox.Init(); err != nil {
+		panic(err)
+	}
+	termbox.SetCursor(0, 0)
+}
+
 func Say(msg string) {
-	fmt.Print(getTimeStr() + msg)
+	fmt.Print(msg)
 }
 func Sayln(msg string) {
 	Say(msg + "\n")
 }
 func SaySub(sub string, msg string) {
-	Sayln("[" + sub + "]" + msg)
+	Sayln(getTimeStr() + "[" + sub + "]" + msg)
+}
+func Print() {
+
 }
 
 //Get timeStamp string as MM-DD,HH:mm:ss
