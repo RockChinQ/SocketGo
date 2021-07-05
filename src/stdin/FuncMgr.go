@@ -25,7 +25,7 @@ func Process(cmd string, args []string) {
 		}
 	}
 	if !found {
-		util.SaySub("FuncMgr", "No such function:"+args[0])
+		util.SaySub("FuncMgr", "err:No such function:"+args[0])
 	}
 	PutPrompt()
 }
@@ -38,4 +38,6 @@ func RegisterFuns() {
 	funcList["!help"] = fun.FuncHelp
 	funcList["!exit"] = fun.FuncExit
 	funcList["!list"] = fun.FuncList
+	funcList["!client"] = fun.FuncClient
+	funcList["!kill"] = fun.FuncKill
 }

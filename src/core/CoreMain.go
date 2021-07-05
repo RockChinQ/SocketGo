@@ -9,19 +9,22 @@ import (
 /*
 Command
 !server
-	!server                                       list all port listeners
-	!server [open <port:int>|close <port:int>]    open/close port listener
-!client
-	!client conn <addr:string>:<port:int>         make a new socket connected to specific port
+	!server                                          list all port listeners
+	!server [open <port:int>|close <port:int>|ls]    open/close/list port listener
+	!server close all                                close ports
+√!client
+	!client conn <addr:string>:<port:int>            make a new socket connected to specific port
+	!client timeout <mill:int>                       set conn establishing timeout
 !list
-	!list                                         list all sockets to ports and from remote hosts
-	!list [client|server]                         list all socket to port or from remote hosts
+	!list                                            list all sockets to ports and from remote hosts
+	!list [client|server]                            list all socket to port or from remote hosts
 !kill
-	!kill <SID:int>                               kill specific socket
+	!kill <SID:int>                                  kill specific socket
+	!kill all                                        kill all existing conn
 !focus
-	!focus <SID:int>                              focus specific socket
+	!focus <SID:int>                                 focus specific socket
 !exit
-	!exit                                         dispose resources and exit
+	!exit                                            dispose resources and exit
 */
 
 var wg sync.WaitGroup

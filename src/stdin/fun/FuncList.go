@@ -13,7 +13,7 @@ func FuncList(args []string, cmd string) map[string]string {
 			util.SaySub("FuncList", itoa(k)+"\t"+v.As+"\t"+util.GetTimeStr(v.ConnT)+"\t"+itoa(v.UpV)+"/"+itoa(v.DownV)+"\t"+itoa32(v.UpD)+"/"+itoa32(v.DownD))
 		}
 	}
-	return make(map[string]string)
+	return EmptyMap()
 }
 
 func itoa(i int) string {
@@ -21,4 +21,8 @@ func itoa(i int) string {
 }
 func itoa32(i uint32) string {
 	return strconv.FormatUint(uint64(i), 10)
+}
+
+func EmptyMap() map[string]string {
+	return make(map[string]string)
 }
