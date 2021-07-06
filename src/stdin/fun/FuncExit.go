@@ -8,7 +8,7 @@ import (
 //Dispose resources and exit:all sockets,opend ports
 func FuncExit(args []string, cmd string) map[string]string {
 	DisposeAll()
-	util.SaySub("Exit", "Exiting.")
+	util.SaySub("FuncExit", "Exiting.")
 	os.Exit(0)
 	return EmptyMap()
 }

@@ -40,4 +40,5 @@ func RegisterFuns() {
 	funcList["!list"] = fun.FuncList
 	funcList["!client"] = fun.FuncClient
 	funcList["!kill"] = fun.FuncKill
+	funcList["!server"] = fun.FuncServer
 }

@@ -9,7 +9,7 @@ import (
 func FuncKill(args []string, cmd string) map[string]string {
 
 	if len(args) < 2 {
-		util.SaySub("Kill", "err:Please provide SID/\"all\" to kill specific/all conn.")
+		util.SaySub("FuncKill", "err:Please provide SID/\"all\" to kill specific/all conn.")
 		return EmptyMap()
 	}
 	if args[1] == "all" {
@@ -18,20 +18,20 @@ func FuncKill(args []string, cmd string) map[string]string {
 		for k, v := range conn.SocketPool {
 			err := v.Dispose()
 			if err != nil {
-				util.SaySub("Kill", "err:Occurs while killing conn SID="+strconv.Itoa(k))
+				util.SaySub("FuncKill", "err:Occurs while killing conn SID="+strconv.Itoa(k))
 				continue
 			}
 			removed[k] = v
 		}
-		for k, _ := range removed {
+		for k := range removed {
 			delete(conn.SocketPool, k)
-			util.SaySub("Kill", "Successfully killed conn SID="+strconv.Itoa(k))
+			util.SaySub("FuncKill", "Successfully killed conn SID="+strconv.Itoa(k))
 		}
 		conn.Lock.Unlock()
 	} else { //kill specific
 		v, err := strconv.Atoi(args[1])
 		if err != nil {
-			util.SaySub("Kill", "err:args[1] is not \"all\" or a number.")
+			util.SaySub("FuncKill", "err:args[1] is not \"all\" or a number.")
 			return EmptyMap()
 		}
 		conn.Lock.Lock()

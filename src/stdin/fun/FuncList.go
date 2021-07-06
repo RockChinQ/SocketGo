@@ -8,10 +8,13 @@ import (
 
 func FuncList(args []string, cmd string) map[string]string {
 	if len(args) == 1 { //all connection
+		conn.Lock.Lock()
 		util.SaySub("FuncList", "SID\tcreator\tconnTime\tspeed(up/down)\tdata(up/down)")
 		for k, v := range conn.SocketPool {
 			util.SaySub("FuncList", itoa(k)+"\t"+v.As+"\t"+util.GetTimeStr(v.ConnT)+"\t"+itoa(v.UpV)+"/"+itoa(v.DownV)+"\t"+itoa32(v.UpD)+"/"+itoa32(v.DownD))
 		}
+		util.SaySub("FuncList", "Done,count:"+strconv.Itoa(len(conn.SocketPool)))
+		conn.Lock.Unlock()
 	}
 	return EmptyMap()
 }
