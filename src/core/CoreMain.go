@@ -10,7 +10,7 @@ import (
 Command
 !server
 	!server                                          list all port listeners
-	!server [open <port:int>|close <port:int>|ls]    open/close/list port listener
+	!server [open <port:int>|close <port:int>]       open/close port listener
 	!server close all                                close ports
 √!client
 	!client conn <addr:string>:<port:int>            make a new socket connected to specific port
