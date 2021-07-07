@@ -35,9 +35,15 @@ func FuncKill(args []string, cmd string) map[string]string {
 			return EmptyMap()
 		}
 		conn.Lock.Lock()
-		conn.SocketPool[v].Dispose()
-		delete(conn.SocketPool, v)
-		conn.Lock.Unlock()
+		err = conn.SocketPool[v].Dispose()
+		if err != nil {
+			util.SaySub("FuncKill", "err:"+err.Error())
+			conn.Lock.Unlock()
+		} else {
+			delete(conn.SocketPool, v)
+			conn.Lock.Unlock()
+			util.SaySub("FuncKill", "Successfully kill conn:SID="+strconv.Itoa(v))
+		}
 	}
 	return EmptyMap()
 }
