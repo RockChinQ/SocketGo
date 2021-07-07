@@ -67,7 +67,7 @@ func FuncServer(args []string, cmd string) map[string]string {
 				if s {
 					util.SaySub("FuncServer", "Successfully closed port:"+strconv.Itoa(port))
 				} else {
-					util.SaySub("FuncServer", "Unable to close port:"+strconv.Itoa(port)+" :"+err.Error())
+					util.SaySub("FuncServer", "Unable to close port:"+strconv.Itoa(port))
 				}
 			}
 		default:
