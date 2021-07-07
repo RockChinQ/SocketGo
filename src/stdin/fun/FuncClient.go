@@ -12,13 +12,13 @@ func FuncClient(args []string, cmd string) map[string]string {
 		util.SaySub("FuncClient", "err:Params not enough.")
 		return EmptyMap()
 	}
-	util.DebugMsg("FuncClient", args[1])
 	switch args[1] {
 	case "conn":
 		if len(args) < 3 { //Check if addr is provided
 			util.SaySub("FuncClient", "err:Please provide addr:port.")
 			return EmptyMap()
 		}
+		util.DebugMsg("FuncClient", args[2])
 		c, err := client.Make(args[2]) //default timeout is 10s
 		if err != nil {                //check if there is a err while making conn
 			util.SaySub("FuncClient", "err:Making conn:"+err.Error())

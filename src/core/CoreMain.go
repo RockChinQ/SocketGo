@@ -8,22 +8,19 @@ import (
 
 /*
 Command
-!server
+√!server
 	!server                                          list all port listeners
 	!server [open <port:int>|close <port:int>]       open/close port listener
-	!server close all                                close ports
 √!client
 	!client conn <addr:string>:<port:int>            make a new socket connected to specific port
 	!client timeout <mill:int>                       set conn establishing timeout
-!list
+√!list
 	!list                                            list all sockets to ports and from remote hosts
 	!list [client|server]                            list all socket to port or from remote hosts
-!kill
+√!kill
 	!kill <SID:int>                                  kill specific socket
 	!kill all                                        kill all existing conn
-!focus
-	!focus <SID:int>                                 focus specific socket
-!exit
+√!exit
 	!exit                                            dispose resources and exit
 */
 
