@@ -37,16 +37,38 @@ func FuncServer(args []string, cmd string) map[string]string {
 				util.SaySub("FuncServer", "err:Please provide port to close.")
 				return EmptyMap()
 			}
-			port, err := strconv.Atoi(args[2])
-			if err != nil {
-				util.SaySub("FuncServer", "err:args[2] is not a number.")
-				return EmptyMap()
-			}
-			s := server.DisposeListener(port)
-			if s {
-				util.SaySub("FuncServer", "Successfully closed port:"+strconv.Itoa(port))
+			if args[2] == "all" {
+				//lock the lpool
+				server.Lock.Lock()
+				//loop all element,call dispose func of each lsn
+				removed := make(map[int]*server.Listener)
+				for k, v := range server.ListenerList {
+					err := v.Dispose()
+					if err != nil {
+						util.SaySub("FuncServer", "Unable to close port:"+v.Lsn.Addr().String()+" :"+err.Error())
+						continue
+					} else {
+						removed[k] = v //add to temp map
+					}
+				}
+				//remove element from lsnpool
+				for k, v := range removed {
+					util.SaySub("FuncServer", "Successfully closed:SID="+itoa(k)+" port="+v.Lsn.Addr().String())
+					delete(server.ListenerList, k)
+				}
+				server.Lock.Unlock()
 			} else {
-				util.SaySub("FuncServer", "Unable to close port:"+strconv.Itoa(port))
+				port, err := strconv.Atoi(args[2])
+				if err != nil {
+					util.SaySub("FuncServer", "err:args[2] is not a number.")
+					return EmptyMap()
+				}
+				s := server.DisposeListener(port)
+				if s {
+					util.SaySub("FuncServer", "Successfully closed port:"+strconv.Itoa(port))
+				} else {
+					util.SaySub("FuncServer", "Unable to close port:"+strconv.Itoa(port)+" :"+err.Error())
+				}
 			}
 		default:
 			util.SaySub("FuncServer", "err:No such operation:"+args[1])
