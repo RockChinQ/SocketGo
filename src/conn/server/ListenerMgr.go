@@ -17,6 +17,7 @@ func AddListener(lsn net.Listener) Listener {
 	ListenerList[lid_index] = &listener
 	lid_index++
 	Lock.Unlock()
+	go listener.AcceptConn()
 	return listener
 }
 
