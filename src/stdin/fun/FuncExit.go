@@ -17,5 +17,5 @@ func DisposeAll() {
 	//kill all conns
 	FuncKill([]string{"!kill", "all"}, "!kill all")
 	//close all ports
-
+	FuncServer([]string{"!server", "close", "all"}, "!server close all")
 }
