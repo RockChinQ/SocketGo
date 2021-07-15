@@ -10,24 +10,22 @@ type Run func(args []string, cmd string) map[string]string
 var funcList map[string]Run
 
 //Process a provided command
-func Process(cmd string, args []string) {
+func Process(cmd string, args []string) map[string]string {
 	if len(args) == 0 { //empty cmd
-		PutPrompt()
-		return
+		return fun.EmptyMap()
 	}
 	found := false
 	for k, v := range funcList {
 		if k == args[0] {
 			found = true
-			//TODO add support for channel
-			_ = v(args, cmd)
-			break
+			m := v(args, cmd)
+			return m
 		}
 	}
 	if !found {
 		util.SaySub("FuncMgr", "err:No such function:"+args[0])
 	}
-	PutPrompt()
+	return fun.EmptyMap()
 }
 
 //Register all supported cmd
@@ -41,4 +39,5 @@ func RegisterFuns() {
 	funcList["!client"] = fun.FuncClient
 	funcList["!kill"] = fun.FuncKill
 	funcList["!server"] = fun.FuncServer
+	funcList["!echo"] = fun.FuncEcho
 }
