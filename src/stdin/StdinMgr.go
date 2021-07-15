@@ -22,18 +22,6 @@ var Prompt = "SKG > "
 */
 
 func Loop() {
-	// for {
-	// 	cmd, args, err := FormatInput()
-	// 	if err != nil {
-	// 		if err.Error() == "EOF" {
-	// 			fun.FuncExit([]string{"!exit"}, "!exit")
-	// 		} else {
-	// 			util.SaySub("Stdin", err.Error())
-	// 		}
-	// 		continue
-	// 	}
-	// 	Process(cmd, args)
-	// }
 	for {
 		input, err := reader.ReadString('\n')
 		if err != nil {

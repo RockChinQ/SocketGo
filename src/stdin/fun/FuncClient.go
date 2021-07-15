@@ -27,7 +27,10 @@ func FuncClient(args []string, cmd string) map[string]string {
 			return ErrMap("err:Making conn:" + err.Error())
 		}
 		h := conn.AddHandler(c, "client")
-		util.SaySub("FuncClient", "Successfully established:SID="+strconv.Itoa(h.SID)+" info:"+h.Conn.RemoteAddr().String()+" "+util.GetTimeStr(h.ConnT))
+		util.SaySub("FuncClient", "Successfully established:SID="+
+			strconv.Itoa(h.SID)+" info:"+
+			h.Conn.RemoteAddr().String()+" "+
+			util.GetTimeStr(h.ConnT))
 	case "timeout": //set timeout
 		if len(args) < 3 {
 			util.SaySub("FuncClient", "Timeout period="+strconv.Itoa(client.Timeout))

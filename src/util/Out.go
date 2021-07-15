@@ -22,8 +22,16 @@ func Print() {
 //Get timeStamp string as MM-DD,HH:mm:ss
 func getNowTimeStr() string {
 	t := time.Now()
-	return strconv.Itoa(int(t.Month())) + "-" + strconv.Itoa(t.Day()) + "," + strconv.Itoa(t.Hour()) + ":" + strconv.Itoa(t.Minute()) + ":" + strconv.Itoa(t.Second())
+	return strconv.Itoa(int(t.Month())) + "-" +
+		strconv.Itoa(t.Day()) + "," +
+		strconv.Itoa(t.Hour()) + ":" +
+		strconv.Itoa(t.Minute()) + ":" +
+		strconv.Itoa(t.Second())
 }
 func GetTimeStr(t time.Time) string {
-	return strconv.Itoa(int(t.Month())) + "-" + strconv.Itoa(t.Day()) + "," + strconv.Itoa(t.Hour()) + ":" + strconv.Itoa(t.Minute()) + ":" + strconv.Itoa(t.Second())
+	return strconv.Itoa(int(t.Month())) + "-" +
+		strconv.Itoa(t.Day()) + "," +
+		strconv.Itoa(t.Hour()) + ":" +
+		strconv.Itoa(t.Minute()) + ":" +
+		strconv.Itoa(t.Second())
 }
