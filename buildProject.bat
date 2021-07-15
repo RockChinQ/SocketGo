@@ -1,2 +1,2 @@
 cd src\core\
-go build -o ..\..\bin\SocketGo.exe CoreMain.go
+go build -o ..\..\bin\SocketGo-Windows-x64.exe CoreMain.go
