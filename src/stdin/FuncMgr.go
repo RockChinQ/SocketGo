@@ -12,7 +12,7 @@ var funcList map[string]Run
 //Process a provided command
 func Process(cmd string, args []string) map[string]string {
 	if len(args) == 0 { //empty cmd
-		return fun.EmptyMap()
+		return fun.NoErrMap()
 	}
 	found := false
 	for k, v := range funcList {
@@ -25,7 +25,7 @@ func Process(cmd string, args []string) map[string]string {
 	if !found {
 		util.SaySub("FuncMgr", "err:No such function:"+args[0])
 	}
-	return fun.EmptyMap()
+	return fun.NoErrMap()
 }
 
 //Register all supported cmd

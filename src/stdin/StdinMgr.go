@@ -53,7 +53,7 @@ func processInput(input string) {
 	input = strings.TrimRight(input, "\n")
 	cmds := strings.Split(input, " | ")
 	len := len(cmds)
-	dataSet := fun.EmptyMap()
+	dataSet := fun.NoErrMap()
 	var err error
 	for i := 0; i < len; i++ {
 		dataSet, err = processCmd(cmds[i], dataSet)

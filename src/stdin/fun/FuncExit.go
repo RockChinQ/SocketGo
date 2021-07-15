@@ -10,7 +10,7 @@ func FuncExit(args []string, cmd string) map[string]string {
 	DisposeAll()
 	util.SaySub("FuncExit", "Exiting.")
 	os.Exit(0)
-	return EmptyMap()
+	return NoErrMap()
 }
 
 func DisposeAll() {

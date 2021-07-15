@@ -6,6 +6,8 @@ import (
 	"strconv"
 )
 
+type data map[string]string
+
 func FuncList(args []string, cmd string) map[string]string {
 	if len(args) == 1 { //all connection
 		conn.Lock.Lock()
@@ -30,9 +32,10 @@ func FuncList(args []string, cmd string) map[string]string {
 			conn.Lock.Unlock()
 		} else {
 			util.SaySub("FuncList", "err:args[1] should be \"client\" or \"server\".")
+			return ErrMap("err:args[1] should be \"client\" or \"server\".")
 		}
 	}
-	return EmptyMap()
+	return NoErrMap()
 }
 
 func itoa(i int) string {
@@ -42,6 +45,13 @@ func itoa32(i uint32) string {
 	return strconv.FormatUint(uint64(i), 10)
 }
 
-func EmptyMap() map[string]string {
+func NoErrMap() map[string]string {
+	m := make(map[string]string)
+	m["error"] = "NULL"
 	return make(map[string]string)
+}
+func ErrMap(err string) map[string]string {
+	m := make(map[string]string)
+	m["error"] = err
+	return m
 }

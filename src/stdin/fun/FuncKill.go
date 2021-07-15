@@ -10,7 +10,7 @@ func FuncKill(args []string, cmd string) map[string]string {
 
 	if len(args) < 2 {
 		util.SaySub("FuncKill", "err:Please provide SID/\"all\" to kill specific/all conn.")
-		return EmptyMap()
+		return ErrMap("err:Please provide SID/\"all\" to kill specific/all conn.")
 	}
 	if args[1] == "all" {
 		conn.Lock.Lock()
@@ -32,18 +32,19 @@ func FuncKill(args []string, cmd string) map[string]string {
 		v, err := strconv.Atoi(args[1])
 		if err != nil {
 			util.SaySub("FuncKill", "err:args[1] is not \"all\" or a number.")
-			return EmptyMap()
+			return ErrMap("err:args[1] is not \"all\" or a number.")
 		}
 		conn.Lock.Lock()
 		err = conn.SocketPool[v].Dispose()
 		if err != nil {
 			util.SaySub("FuncKill", "err:"+err.Error())
 			conn.Lock.Unlock()
+			return ErrMap("err:" + err.Error())
 		} else {
 			delete(conn.SocketPool, v)
 			conn.Lock.Unlock()
 			util.SaySub("FuncKill", "Successfully kill conn:SID="+strconv.Itoa(v))
 		}
 	}
-	return EmptyMap()
+	return NoErrMap()
 }

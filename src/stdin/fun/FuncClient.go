@@ -45,6 +45,7 @@ func FuncClient(args []string, cmd string) map[string]string {
 		util.SaySub("FuncClient", "Successfully set timeout period="+args[2])
 	default: //Provided invalid opertion
 		util.SaySub("FuncClient", "err:No such operation:"+args[1])
+		return ErrMap("err:No such operation:" + args[1])
 	}
 	return NoErrMap()
 }
