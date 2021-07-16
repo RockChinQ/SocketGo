@@ -2,14 +2,13 @@ package fun
 
 import (
 	"SocketGo/src/model"
-	"SocketGo/src/util"
 	"os"
 )
 
 //Dispose resources and exit:all sockets,opend ports
 func FuncExit(info *model.ExecInfo) {
 	DisposeAll()
-	util.SaySub("FuncExit", "Exiting.")
+	info.SaySub("FuncExit", "Exiting.")
 	os.Exit(0)
 }
 
