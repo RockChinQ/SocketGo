@@ -4,6 +4,7 @@ import (
 	"SocketGo/src/model"
 	"SocketGo/src/stdin/fun"
 	"SocketGo/src/util"
+	"strings"
 )
 
 type Run func(info *model.ExecInfo)
@@ -17,9 +18,12 @@ func Process(info *model.ExecInfo) {
 	}
 	found := false
 	for k, v := range funcList {
-		if k == info.Args[0] {
+		if k == strings.TrimLeft(info.Args[0], "@") {
 			found = true
+			info.Cmd = strings.TrimLeft(info.Cmd, "@")
+			info.Args[0] = strings.TrimLeft(info.Args[0], "@")
 			v(info)
+			info.Data["output"] = strings.TrimRight(info.Data["output"], "\n")
 			return
 		}
 	}
@@ -34,11 +38,11 @@ func RegisterFuns() {
 	util.DebugMsg("FuncMgr", "Initially registering all functions.")
 	funcList = make(map[string]Run)
 
-	funcList["!help"] = fun.FuncHelp
-	funcList["!exit"] = fun.FuncExit
-	funcList["!list"] = fun.FuncList
-	funcList["!client"] = fun.FuncClient
-	funcList["!kill"] = fun.FuncKill
-	funcList["!server"] = fun.FuncServer
-	funcList["!echo"] = fun.FuncEcho
+	funcList["help"] = fun.FuncHelp
+	funcList["exit"] = fun.FuncExit
+	funcList["list"] = fun.FuncList
+	funcList["client"] = fun.FuncClient
+	funcList["kill"] = fun.FuncKill
+	funcList["server"] = fun.FuncServer
+	funcList["echo"] = fun.FuncEcho
 }

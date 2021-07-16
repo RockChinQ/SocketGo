@@ -45,10 +45,9 @@ func processInput(input string) {
 	dataSet := fun.NoErrMap()
 	var err error
 	for i := 0; i < len; i++ {
-		dataSet, err = processCmd(cmds[i], dataSet)
+		dataSet, err = processCmd(strings.TrimSpace(cmds[i]), dataSet)
 		if err != nil {
-			util.SaySub("Process", "error occurred,channel break:"+cmds[i])
-			break
+			util.SaySub("Process", "error occurred while handle:"+cmds[i])
 		}
 	}
 }
@@ -73,7 +72,7 @@ func processCmd(cmd string, ds map[string]string) (map[string]string, error) {
 		sptProcessed[index] = tempStr
 	}
 	//Launch func,and cat data from *ExecInfo
-	ei := model.InitExecInfo(cmd, sptProcessed, false)
+	ei := model.InitExecInfo(cmd, sptProcessed, cmd[0] == '@')
 	Process(ei)
 	data := ei.Data
 
