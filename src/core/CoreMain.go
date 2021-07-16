@@ -47,5 +47,5 @@ func Welcome() {
 	util.Sayln("     /        (  <_> )  \\___|    <\\  ___/|  |  \\    \\_\\  (  <_> )")
 	util.Sayln("    /_______  /\\____/ \\___  >__|_  \\___  >__|   \\______  /\\____/")
 	util.Sayln("            \\/            \\/     \\/    \\/              \\/")
-	util.Sayln("\nMade by Rock Chin,just for fun. See:https://github.com/RockChinQ/SocketGo\nType \"!help\" to get started. Command history can only work on Windows.\n")
+	util.Sayln("\nMade by Rock Chin,just for fun. See:https://github.com/RockChinQ/SocketGo\nType \"help\" to get started. Command history can only work on Windows.\n")
 }
