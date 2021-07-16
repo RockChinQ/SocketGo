@@ -1,12 +1,13 @@
 package fun
 
-import "SocketGo/src/util"
+import (
+	"SocketGo/src/model"
+	"SocketGo/src/util"
+)
 
-func FuncEcho(args []string, cmd string) map[string]string {
-	if len(args) > 1 {
-		util.Sayln(cmd[6:])
+func FuncEcho(info *model.ExecInfo) {
+	if len(info.Args) > 1 {
+		util.Sayln(info.Cmd[6:])
 	}
-	m := make(map[string]string)
-	m["msg"] = cmd[6:]
-	return m
+	info.Set("echo", info.Cmd[6:])
 }

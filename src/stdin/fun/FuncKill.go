@@ -2,17 +2,19 @@ package fun
 
 import (
 	"SocketGo/src/conn"
+	"SocketGo/src/model"
 	"SocketGo/src/util"
 	"strconv"
 )
 
-func FuncKill(args []string, cmd string) map[string]string {
+func FuncKill(info *model.ExecInfo) {
 
-	if len(args) < 2 {
+	if len(info.Args) < 2 {
 		util.SaySub("FuncKill", "err:Please provide SID/\"all\" to kill specific/all conn.")
-		return ErrMap("err:Please provide SID/\"all\" to kill specific/all conn.")
+		info.Error("err:Please provide SID/\"all\" to kill specific/all conn.")
+		return
 	}
-	if args[1] == "all" {
+	if info.Args[1] == "all" {
 		conn.Lock.Lock()
 		removed := make(map[int]*conn.Handler)
 		for k, v := range conn.SocketPool {
@@ -29,22 +31,23 @@ func FuncKill(args []string, cmd string) map[string]string {
 		}
 		conn.Lock.Unlock()
 	} else { //kill specific
-		v, err := strconv.Atoi(args[1])
+		v, err := strconv.Atoi(info.Args[1])
 		if err != nil {
 			util.SaySub("FuncKill", "err:args[1] is not \"all\" or a number.")
-			return ErrMap("err:args[1] is not \"all\" or a number.")
+			info.Error("err:args[1] is not \"all\" or a number.")
+			return
 		}
 		conn.Lock.Lock()
 		err = conn.SocketPool[v].Dispose()
 		if err != nil {
 			util.SaySub("FuncKill", "err:"+err.Error())
 			conn.Lock.Unlock()
-			return ErrMap("err:" + err.Error())
+			info.Error("err:" + err.Error())
+			return
 		} else {
 			delete(conn.SocketPool, v)
 			conn.Lock.Unlock()
 			util.SaySub("FuncKill", "Successfully kill conn:SID="+strconv.Itoa(v))
 		}
 	}
-	return NoErrMap()
 }

@@ -1,31 +1,32 @@
 package stdin
 
 import (
+	"SocketGo/src/model"
 	"SocketGo/src/stdin/fun"
 	"SocketGo/src/util"
 )
 
-type Run func(args []string, cmd string) map[string]string
+type Run func(info *model.ExecInfo)
 
 var funcList map[string]Run
 
 //Process a provided command
-func Process(cmd string, args []string) map[string]string {
-	if len(args) == 0 { //empty cmd
-		return fun.NoErrMap()
+func Process(info *model.ExecInfo) {
+	if len(info.Args) == 0 { //empty cmd
+		return
 	}
 	found := false
 	for k, v := range funcList {
-		if k == args[0] {
+		if k == info.Args[0] {
 			found = true
-			m := v(args, cmd)
-			return m
+			v(info)
+			return
 		}
 	}
 	if !found {
-		util.SaySub("FuncMgr", "err:No such function:"+args[0])
+		util.SaySub("FuncMgr", "err:No such function:"+info.Args[0])
+		info.Error("err:No such function:" + info.Args[0])
 	}
-	return fun.NoErrMap()
 }
 
 //Register all supported cmd

@@ -1,6 +1,7 @@
 package stdin
 
 import (
+	"SocketGo/src/model"
 	"SocketGo/src/stdin/fun"
 	"SocketGo/src/util"
 	"bufio"
@@ -26,7 +27,7 @@ func Loop() {
 		input, err := reader.ReadString('\n')
 		if err != nil {
 			if err.Error() == "EOF" {
-				fun.FuncExit([]string{"!exit"}, "!exit")
+				fun.FuncExit(model.InitExecInfo("!exit", []string{"!exit"}, false))
 			} else {
 				util.SaySub("Stdin", err.Error())
 			}
@@ -71,8 +72,10 @@ func processCmd(cmd string, ds map[string]string) (map[string]string, error) {
 		}
 		sptProcessed[index] = tempStr
 	}
-
-	data := Process(cmd, sptProcessed)
+	//Launch func,and cat data from *ExecInfo
+	ei := model.InitExecInfo(cmd, sptProcessed, false)
+	Process(ei)
+	data := ei.Data
 
 	//check result
 	if data["error"] == "NULL" || !existKey(data, "error") {
@@ -81,6 +84,7 @@ func processCmd(cmd string, ds map[string]string) (map[string]string, error) {
 		return data, errors.New(data["error"])
 	}
 }
+
 func PutPrompt() {
 	util.Say("\033[42;30m" + Prompt + "\033[0m")
 }

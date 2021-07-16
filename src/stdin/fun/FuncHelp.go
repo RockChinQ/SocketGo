@@ -1,9 +1,11 @@
 package fun
 
-import "SocketGo/src/util"
+import (
+	"SocketGo/src/model"
+	"SocketGo/src/util"
+)
 
-func FuncHelp(args []string, cmd string) map[string]string {
+func FuncHelp(info *model.ExecInfo) {
 	util.SaySub("FuncHelp", "Name\tParam\tDescription")
 	util.SaySub("FuncHelp", "!help\t\tDisplay this message")
-	return NoErrMap()
 }

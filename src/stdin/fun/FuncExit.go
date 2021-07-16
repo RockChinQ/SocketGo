@@ -1,21 +1,21 @@
 package fun
 
 import (
+	"SocketGo/src/model"
 	"SocketGo/src/util"
 	"os"
 )
 
 //Dispose resources and exit:all sockets,opend ports
-func FuncExit(args []string, cmd string) map[string]string {
+func FuncExit(info *model.ExecInfo) {
 	DisposeAll()
 	util.SaySub("FuncExit", "Exiting.")
 	os.Exit(0)
-	return NoErrMap()
 }
 
 func DisposeAll() {
 	//kill all conns
-	FuncKill([]string{"!kill", "all"}, "!kill all")
+	FuncKill(model.InitExecInfo("!kill all", []string{"!kill", "all"}, false))
 	//close all ports
-	FuncServer([]string{"!server", "close", "all"}, "!server close all")
+	FuncServer(model.InitExecInfo("!server close all", []string{"!server", "close", "all"}, false))
 }
