@@ -48,7 +48,7 @@ func itoa32(i uint32) string {
 func NoErrMap() map[string]string {
 	m := make(map[string]string)
 	m["error"] = "NULL"
-	return make(map[string]string)
+	return m
 }
 func ErrMap(err string) map[string]string {
 	m := make(map[string]string)

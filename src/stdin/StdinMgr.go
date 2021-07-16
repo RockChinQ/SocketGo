@@ -39,7 +39,7 @@ func Loop() {
 //Handle raw input from stdin,process channel relationship,launch each cmd
 func processInput(input string) {
 	input = strings.TrimRight(input, "\n")
-	cmds := strings.Split(input, " | ")
+	cmds := strings.Split(input, "|")
 	len := len(cmds)
 	dataSet := fun.NoErrMap()
 	var err error
