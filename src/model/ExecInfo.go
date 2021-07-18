@@ -10,8 +10,9 @@ import (
 Pass a ExecInfo instance pointer to a Func and return with the info of the Func
 */
 type ExecInfo struct {
-	Cmd  string
-	Args []string
+	Cmd    string            //set by caller
+	Args   []string          //set by caller
+	LsData map[string]string //set by caller,empty if this is the first cmd in a input
 
 	Data map[string]string
 
