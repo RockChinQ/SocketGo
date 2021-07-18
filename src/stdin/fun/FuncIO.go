@@ -23,7 +23,7 @@ func FuncIO(info *model.ExecInfo) {
 	}
 	switch info.Args[1] {
 	case "r": //read from a conn
-		msg, err := ReadString(*handler)
+		msg, err := ReadString(handler)
 		if err != nil {
 			info.Set("result", "")
 			info.SaySub("FuncIO", "err:No such conn:"+info.Args[2])
@@ -34,18 +34,20 @@ func FuncIO(info *model.ExecInfo) {
 		return
 	case "w": //write to a conn,message:string as args[3] required.
 		if len(info.Args) < 4 {
-			info.Set("result", "")
+			info.Set("result", "FAILED")
 			info.SaySub("FuncIO", "err:Message(args[3]) is null,type \"help\" to get help.")
 			info.Error("err:Message(args[3]) is null,type \"help\" to get help.")
 			return
 		}
-		msg := info.Args[3]
+		//Replace escapes
+		msg := info.Cmd[(6 + len(info.Args[2])):]
 		msg = strings.ReplaceAll(msg, "\\\\", "\\")
 		msg = strings.ReplaceAll(msg, "\\n", "\n")
 		msg = strings.ReplaceAll(msg, "\\\"", "\"")
 		msg = strings.ReplaceAll(msg, "\\t", "\t")
 		msg = strings.ReplaceAll(msg, "\\r", "\r")
-		err := WriteString(*handler, msg)
+		//try to write
+		err := WriteString(handler, msg)
 		if err != nil {
 			info.Set("result", "FAILED")
 			// info.SaySub("FuncIO", "err:Failed to write msg to conn SID="+strconv.Itoa(handler.SID))
@@ -64,26 +66,33 @@ func FuncIO(info *model.ExecInfo) {
 
 func GetHandler(str string) (*conn.Handler, bool) {
 	sid := strings.Split(str, ".")[0]
+	conn.Lock.Lock()
 	for _, v := range conn.SocketPool {
 		if strconv.Itoa(v.SID) == sid {
+			conn.Lock.Unlock()
 			return v, true
 		}
 	}
+	conn.Lock.Unlock()
 	return nil, false
 }
 
-func ReadString(h conn.Handler) (string, error) {
+func ReadString(h *conn.Handler) (string, error) {
 	buf := make([]byte, 1024)
 	n, err := h.Conn.Read(buf)
 	if err != nil {
 		return "", err
 	}
+	h.DownD += uint32(n)
 	return string(buf[:n]), nil
 }
 
-func WriteString(h conn.Handler, msg string) (err error) {
+func WriteString(h *conn.Handler, msg string) (err error) {
 	writer := bufio.NewWriter(h.Conn)
-	_, err = writer.Write([]byte(msg))
+	l, err := writer.Write([]byte(msg))
 	writer.Flush()
+	if err == nil {
+		h.UpD += uint32(l)
+	}
 	return err
 }

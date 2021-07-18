@@ -106,9 +106,6 @@ func RealCmd(raw string) string {
 		} else {
 			return "echo " + noat[1:]
 		}
-	} else if regexp.MustCompile(`>>&*`).MatchString(raw) || regexp.MustCompile(`&*>>`).MatchString(raw) { //io
-
-		return raw
 	} else {
 		return raw
 	}
