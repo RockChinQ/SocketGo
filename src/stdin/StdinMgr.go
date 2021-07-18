@@ -32,7 +32,9 @@ func Loop() {
 				util.SaySub("Stdin", err.Error())
 			}
 		}
-		processInput(input)
+		if len(input) > 0 {
+			processInput(input)
+		}
 		PutPrompt()
 	}
 }
@@ -41,10 +43,13 @@ func Loop() {
 func processInput(input string) {
 	input = strings.TrimRight(input, "\n")
 	cmds := strings.Split(input, "|")
-	len := len(cmds)
+	leng := len(cmds)
 	dataSet := fun.NoErrMap()
 	var err error
-	for i := 0; i < len; i++ {
+	for i := 0; i < leng; i++ {
+		if len(strings.TrimSpace(cmds[i])) == 0 {
+			continue
+		}
 		dataSet, err = processCmd(strings.TrimSpace(cmds[i]), dataSet)
 		if err != nil {
 			util.SaySub("Process", "error occurred while handle:"+cmds[i])
@@ -54,6 +59,9 @@ func processInput(input string) {
 
 //Process single cmd:Replace ds quote in raw cmd,launch processed cmd
 func processCmd(cmd string, ds map[string]string) (map[string]string, error) {
+	//check if thia is a simplified cmd
+	cmd = RealCmd(cmd)
+
 	//check data requirement
 	//$fieldName$
 	sptRaw := strings.Fields(cmd)
@@ -73,6 +81,7 @@ func processCmd(cmd string, ds map[string]string) (map[string]string, error) {
 	}
 	//Launch func,and cat data from *ExecInfo
 	ei := model.InitExecInfo(cmd, sptProcessed, cmd[0] == '@')
+	ei.LsData = ds
 	Process(ei)
 	data := ei.Data
 
@@ -81,6 +90,27 @@ func processCmd(cmd string, ds map[string]string) (map[string]string, error) {
 		return data, nil
 	} else {
 		return data, errors.New(data["error"])
+	}
+}
+
+//If this is a simplified form of a specific cmd
+//change it to the real cmd.
+//If not,return original cmd.
+func RealCmd(raw string) string {
+	stWithAt := raw[0] == '@'
+	noat := strings.TrimLeft(raw, "@")
+
+	if noat[0] == '"' { //echo
+		if stWithAt {
+			return "@echo " + noat[1:]
+		} else {
+			return "echo " + noat[1:]
+		}
+	} else if regexp.MustCompile(`>>&*`).MatchString(raw) || regexp.MustCompile(`&*>>`).MatchString(raw) { //io
+
+		return raw
+	} else {
+		return raw
 	}
 }
 
