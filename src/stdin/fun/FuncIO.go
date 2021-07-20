@@ -23,14 +23,9 @@ func FuncIO(info *model.ExecInfo) {
 	}
 	switch info.Args[1] {
 	case "r": //read from a conn
-		msg, err := ReadString(handler)
-		if err != nil {
-			info.Set("result", "")
-			info.SaySub("FuncIO", "err:No such conn:"+info.Args[2])
-			info.Error("err:No such conn:" + info.Args[2])
-			return
-		}
+		msg := *handler.Buf
 		info.Set("result", msg)
+		*handler.Buf = ""
 		return
 	case "w": //write to a conn,message:string as args[3] required.
 		if len(info.Args) < 4 {
@@ -75,16 +70,6 @@ func GetHandler(str string) (*conn.Handler, bool) {
 	}
 	conn.Lock.Unlock()
 	return nil, false
-}
-
-func ReadString(h *conn.Handler) (string, error) {
-	buf := make([]byte, 1024)
-	n, err := h.Conn.Read(buf)
-	if err != nil {
-		return "", err
-	}
-	h.DownD += uint32(n)
-	return string(buf[:n]), nil
 }
 
 func WriteString(h *conn.Handler, msg string) (err error) {

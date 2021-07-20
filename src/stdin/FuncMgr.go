@@ -18,8 +18,23 @@ func Process(info *model.ExecInfo) {
 		return
 	}
 	//check if this is a msg channel
-	if regexp.MustCompile(`^[*>>*]$`).MatchString(info.Cmd) {
-
+	if regexp.MustCompile(`>>`).MatchString(info.Cmd) {
+		spt := strings.Split(info.Cmd, ">>")
+		//check which includes the target
+		if regexp.MustCompile(`&`).MatchString(spt[0]) {
+			if len(spt[1]) >= 1 {
+				processInput("io r " + spt[0][1:] + "|" + spt[1])
+			} else {
+				processInput("io r " + spt[0][1:] + "|echo $result$")
+			}
+		} else if regexp.MustCompile(`&`).MatchString(spt[1]) {
+			if len(spt[0]) >= 1 {
+				processInput(spt[0] + "|io w " + spt[1][1:] + " $output$|\"$result$")
+			}
+		} else {
+			info.SaySub("FuncMgr", "err:Syntax error.")
+			info.Error("err:Syntax error.")
+		}
 	} else {
 		//index cmds
 		found := false
@@ -34,7 +49,7 @@ func Process(info *model.ExecInfo) {
 			}
 		}
 		if !found {
-			util.SaySub("FuncMgr", "err:No such function:"+info.Args[0])
+			info.SaySub("FuncMgr", "err:No such function:"+info.Args[0])
 			info.Error("err:No such function:" + info.Args[0])
 		}
 	}

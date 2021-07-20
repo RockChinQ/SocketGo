@@ -14,7 +14,8 @@ type Handler struct {
 	DownV  int       //download speed
 	UpD    uint32    //amount of upload data
 	DownD  uint32    //amount of download data
-	Recv   string    //received data
+	Recv   *string   //received data
+	Buf    *string   //store buffer msg
 	Status string
 }
 
@@ -29,11 +30,35 @@ func NewHandler(conn net.Conn, as string) Handler {
 	h.DownV = 0
 	h.UpD = 0
 	h.DownD = 0
-	h.Recv = ""
+	es := ""
+	h.Recv = &es
+	h.Buf = &es
 	h.Status = "established"
+	go h.Read()
 	return h
+}
+
+func (h *Handler) Read() {
+	for {
+		s, err := ReadString(h)
+		if err != nil {
+			return
+		}
+		*h.Buf = *h.Buf + s
+		*h.Recv = *h.Recv + s
+	}
 }
 
 func (h *Handler) Dispose() error {
 	return h.Conn.Close()
+}
+
+func ReadString(h *Handler) (string, error) {
+	buf := make([]byte, 1024)
+	n, err := h.Conn.Read(buf)
+	if err != nil {
+		return "", err
+	}
+	h.DownD += uint32(n)
+	return string(buf[:n]), nil
 }
