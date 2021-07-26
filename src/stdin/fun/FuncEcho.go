@@ -2,11 +2,16 @@ package fun
 
 import (
 	"SocketGo/src/model"
+	"strings"
 )
 
 func FuncEcho(info *model.ExecInfo) {
-	if len(info.Args) > 1 {
-		info.Sayln(info.Cmd[5:])
-	}
-	info.Set("echo", info.Cmd[5:])
+	msg := info.Cmd[5:]
+	msg = strings.ReplaceAll(msg, "\\\\", "\\")
+	msg = strings.ReplaceAll(msg, "\\n", "\n")
+	msg = strings.ReplaceAll(msg, "\\\"", "\"")
+	msg = strings.ReplaceAll(msg, "\\t", "\t")
+	msg = strings.ReplaceAll(msg, "\\r", "\r")
+	info.Sayln(msg)
+	info.Set("echo", msg)
 }
